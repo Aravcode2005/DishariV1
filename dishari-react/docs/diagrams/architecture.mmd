@@ -1,0 +1,39 @@
+flowchart LR
+  classDef front fill:#E4EDEE,stroke:#0E5A6B,color:#1C2024,stroke-width:2px;
+  classDef service fill:#FFFFFF,stroke:#D9D5CB,color:#1C2024;
+  classDef risk fill:#FDEBE8,stroke:#B3261E,color:#4A0E0A;
+  classDef rule fill:#E7F3EA,stroke:#2F7D4A,color:#0F2E17;
+  classDef data fill:#FFF3D1,stroke:#A86B00,color:#3D2600;
+  subgraph desk[Service centre]
+    C[Citizen] --> O[Operator]
+    O --> UI[React TS frontend: Upload / Review / Bengali Print]
+  end
+  subgraph edge[API / security]
+    API[HTTPS API: auth, CORS, limits] --> Consent[Consent + case record]
+    Consent --> Ingest[Validation + secure upload]
+  end
+  subgraph intel[Document intelligence + verified rules]
+    OCR[OCR / Gemini extraction] --> N[Normalize + provenance]
+    N --> Audit[Mismatch audit: suggestions labelled as inferences]
+    Audit --> R[Versioned deterministic scheme rules]
+    R --> SUM[Bengali template renderer]
+  end
+  subgraph data[Protected data services]
+    Store[(Encrypted temporary object store)]
+    DB[(Case + consent audit database)]
+    Packs[(Officially sourced rule packs)]
+    TTL[Retention + deletion]
+  end
+  UI -->|POST /api/v1/cases/check| API
+  Ingest --> OCR
+  Ingest -.-> Store
+  Consent -.-> DB
+  Packs -.-> R
+  Store --> TTL
+  SUM -->|CheckResult; human approves| UI
+  UI -.->|Manual operator submission only| Portal[Official government portals]
+  class UI,O,API front;
+  class Consent,Ingest,OCR,N,SUM,Portal service;
+  class Audit risk;
+  class R rule;
+  class Store,DB,Packs,TTL data;

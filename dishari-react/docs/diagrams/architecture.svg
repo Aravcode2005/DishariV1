@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1090" width="1800" height="1090" role="img" aria-labelledby="t d">
+<title id="t">Dishari proposed end-to-end system architecture</title><desc id="d">Four stages: operator desk, secure API, document intelligence, and deterministic rules with Bengali summary. Protected data stores and operator-only government submission.</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0E5A6B"/></marker>
+<marker id="arrowSoft" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M 0 0 L 9 4.5 L 0 9 z" fill="#8C8A80"/></marker>
+</defs><rect width="100%" height="100%" fill="#F5F3EE"/>
+<text x="52" y="65" font-family="DejaVu Sans,Arial,sans-serif" font-size="32" font-weight="700" fill="#1C2024">DISHARI</text>
+<text x="250" y="65" font-family="DejaVu Sans,Arial,sans-serif" font-size="27" fill="#4F5660">/ Proposed system architecture</text>
+<text x="52" y="100" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" fill="#4F5660">Backend architecture is a design proposal. Only the React frontend and local mock ship in the ZIP.</text>
+<rect x="52" y="135" width="382" height="620" rx="19" fill="#FFFFFF" stroke="#D9D5CB" stroke-width="2"/>
+<rect x="52" y="135" width="382" height="82" rx="19" fill="#E4EDEE" stroke="#D9D5CB" stroke-width="1.6"/>
+<text x="74" y="171" font-family="DejaVu Sans,Arial,sans-serif" font-size="16" font-weight="700" fill="#0E5A6B" text-anchor="start">01</text>
+<text x="74" y="199" font-family="DejaVu Sans,Arial,sans-serif" font-size="22" font-weight="700" fill="#1C2024" text-anchor="start">SERVICE DESK</text>
+<rect x="491" y="135" width="382" height="620" rx="19" fill="#FFFFFF" stroke="#D9D5CB" stroke-width="2"/>
+<rect x="491" y="135" width="382" height="82" rx="19" fill="#E4EDEE" stroke="#D9D5CB" stroke-width="1.6"/>
+<text x="513" y="171" font-family="DejaVu Sans,Arial,sans-serif" font-size="16" font-weight="700" fill="#0E5A6B" text-anchor="start">02</text>
+<text x="513" y="199" font-family="DejaVu Sans,Arial,sans-serif" font-size="22" font-weight="700" fill="#1C2024" text-anchor="start">SECURE API</text>
+<rect x="930" y="135" width="382" height="620" rx="19" fill="#FFFFFF" stroke="#D9D5CB" stroke-width="2"/>
+<rect x="930" y="135" width="382" height="82" rx="19" fill="#E4EDEE" stroke="#D9D5CB" stroke-width="1.6"/>
+<text x="952" y="171" font-family="DejaVu Sans,Arial,sans-serif" font-size="16" font-weight="700" fill="#0E5A6B" text-anchor="start">03</text>
+<text x="952" y="199" font-family="DejaVu Sans,Arial,sans-serif" font-size="22" font-weight="700" fill="#1C2024" text-anchor="start">DOCUMENT AI</text>
+<rect x="1369" y="135" width="382" height="620" rx="19" fill="#FFFFFF" stroke="#D9D5CB" stroke-width="2"/>
+<rect x="1369" y="135" width="382" height="82" rx="19" fill="#E4EDEE" stroke="#D9D5CB" stroke-width="1.6"/>
+<text x="1391" y="171" font-family="DejaVu Sans,Arial,sans-serif" font-size="16" font-weight="700" fill="#0E5A6B" text-anchor="start">04</text>
+<text x="1391" y="199" font-family="DejaVu Sans,Arial,sans-serif" font-size="22" font-weight="700" fill="#1C2024" text-anchor="start">RULES &amp; OUTPUT</text>
+<rect x="73" y="245" width="340" height="120" rx="12" fill="#FFFFFF" stroke="#D9D5CB" stroke-width="1.7"/>
+<text x="93" y="280" font-family="DejaVu Sans,Arial,sans-serif" font-size="20" font-weight="700" fill="#1C2024" text-anchor="start">Citizen + operator</text>
+<text x="93" y="309" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Consent, scan, document selection</text>
+<text x="93" y="332" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Operator stays in control</text>
+<rect x="73" y="387" width="340" height="120" rx="12" fill="#E4EDEE" stroke="#0E5A6B" stroke-width="1.7"/>
+<text x="93" y="422" font-family="DejaVu Sans,Arial,sans-serif" font-size="20" font-weight="700" fill="#1C2024" text-anchor="start">React + TypeScript UI</text>
+<text x="93" y="451" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Upload → Review → Summary</text>
+<text x="93" y="474" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Responsive + accessible + printable</text>
+<rect x="73" y="532" width="340" height="120" rx="12" fill="#E7F3EA" stroke="#2F7D4A" stroke-width="1.7"/>
+<text x="93" y="567" font-family="DejaVu Sans,Arial,sans-serif" font-size="20" font-weight="700" fill="#1C2024" text-anchor="start">Explicit human approval</text>
+<text x="93" y="596" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Checks original documents</text>
+<text x="93" y="619" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Official portal submission is manual</text>
+<rect x="512" y="245" width="340" height="120" rx="12" fill="#E4EDEE" stroke="#0E5A6B" stroke-width="1.7"/>
+<text x="532" y="280" font-family="DejaVu Sans,Arial,sans-serif" font-size="20" font-weight="700" fill="#1C2024" text-anchor="start">HTTPS API gateway</text>
+<text x="532" y="309" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Auth, CORS, rate limiting</text>
+<text x="532" y="332" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">POST multipart case + files</text>
+<rect x="512" y="387" width="340" height="120" rx="12" fill="#FFFFFF" stroke="#D9D5CB" stroke-width="1.7"/>
+<text x="532" y="422" font-family="DejaVu Sans,Arial,sans-serif" font-size="20" font-weight="700" fill="#1C2024" text-anchor="start">Consent + case service</text>
+<text x="532" y="451" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Purpose-bound consent receipt</text>
+<text x="532" y="474" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Tenant access + audit trail</text>
+<rect x="512" y="532" width="340" height="120" rx="12" fill="#FFFFFF" stroke="#D9D5CB" stroke-width="1.7"/>
+<text x="532" y="567" font-family="DejaVu Sans,Arial,sans-serif" font-size="20" font-weight="700" fill="#1C2024" text-anchor="start">Secure document ingest</text>
+<text x="532" y="596" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Type/size scan + quarantine</text>
+<text x="532" y="619" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Temporary encrypted storage</text>
+<rect x="951" y="245" width="340" height="120" rx="12" fill="#FFFFFF" stroke="#D9D5CB" stroke-width="1.7"/>
+<text x="971" y="280" font-family="DejaVu Sans,Arial,sans-serif" font-size="20" font-weight="700" fill="#1C2024" text-anchor="start">OCR + Gemini reading</text>
+<text x="971" y="309" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Multilingual field extraction</text>
+<text x="971" y="332" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Confidence + source evidence</text>
+<rect x="951" y="387" width="340" height="120" rx="12" fill="#FFFFFF" stroke="#D9D5CB" stroke-width="1.7"/>
+<text x="971" y="422" font-family="DejaVu Sans,Arial,sans-serif" font-size="20" font-weight="700" fill="#1C2024" text-anchor="start">Profile normalizer</text>
+<text x="971" y="451" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Canonical facts with provenance</text>
+<text x="971" y="474" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Ambiguity stays unresolved</text>
+<rect x="951" y="532" width="340" height="120" rx="12" fill="#FDEBE8" stroke="#B3261E" stroke-width="1.7"/>
+<text x="971" y="567" font-family="DejaVu Sans,Arial,sans-serif" font-size="20" font-weight="700" fill="#1C2024" text-anchor="start">Mismatch audit</text>
+<text x="971" y="596" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Cross-document discrepancies</text>
+<text x="971" y="619" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Likely outlier ≠ official rule</text>
+<rect x="1390" y="245" width="340" height="120" rx="12" fill="#E7F3EA" stroke="#2F7D4A" stroke-width="1.7"/>
+<text x="1410" y="280" font-family="DejaVu Sans,Arial,sans-serif" font-size="20" font-weight="700" fill="#1C2024" text-anchor="start">Deterministic rules</text>
+<text x="1410" y="309" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Versioned, cited source packs</text>
+<text x="1410" y="332" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">No AI-invented thresholds</text>
+<rect x="1390" y="387" width="340" height="120" rx="12" fill="#E7F3EA" stroke="#2F7D4A" stroke-width="1.7"/>
+<text x="1410" y="422" font-family="DejaVu Sans,Arial,sans-serif" font-size="20" font-weight="700" fill="#1C2024" text-anchor="start">Bengali summary service</text>
+<text x="1410" y="451" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Template-backed advice</text>
+<text x="1410" y="474" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Provisional status clearly labelled</text>
+<rect x="1390" y="532" width="340" height="120" rx="12" fill="#FFFFFF" stroke="#8C8A80" stroke-width="1.7"/>
+<text x="1410" y="567" font-family="DejaVu Sans,Arial,sans-serif" font-size="20" font-weight="700" fill="#1C2024" text-anchor="start">Official govt. portals</text>
+<text x="1410" y="596" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Outside Dishari automation</text>
+<text x="1410" y="619" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#3B424A" text-anchor="start">Operator signs in and submits</text>
+<path d="M243 349 L243 378" fill="none" stroke="#0E5A6B" stroke-width="3"  marker-end="url(#arrow)"/>
+<path d="M243 491 L243 523" fill="none" stroke="#0E5A6B" stroke-width="3"  marker-end="url(#arrow)"/>
+<path d="M682 349 L682 378" fill="none" stroke="#0E5A6B" stroke-width="3"  marker-end="url(#arrow)"/>
+<path d="M682 491 L682 523" fill="none" stroke="#0E5A6B" stroke-width="3"  marker-end="url(#arrow)"/>
+<path d="M1121 349 L1121 378" fill="none" stroke="#0E5A6B" stroke-width="3"  marker-end="url(#arrow)"/>
+<path d="M1121 491 L1121 523" fill="none" stroke="#0E5A6B" stroke-width="3"  marker-end="url(#arrow)"/>
+<path d="M1560 349 L1560 378" fill="none" stroke="#0E5A6B" stroke-width="3"  marker-end="url(#arrow)"/>
+<path d="M1560 491 L1560 523" fill="none" stroke="#0E5A6B" stroke-width="3"  marker-end="url(#arrow)"/>
+<path d="M413 461 L491 461" fill="none" stroke="#0E5A6B" stroke-width="3"  marker-end="url(#arrow)"/>
+<path d="M852 461 L930 461" fill="none" stroke="#0E5A6B" stroke-width="3"  marker-end="url(#arrow)"/>
+<path d="M1291 461 L1369 461" fill="none" stroke="#0E5A6B" stroke-width="3"  marker-end="url(#arrow)"/>
+<rect x="52" y="779" width="1680" height="54" rx="12" fill="#FFFFFF" stroke="#D9D5CB" stroke-width="1.5"/>
+<text x="76" y="813" font-family="DejaVu Sans,Arial,sans-serif" font-size="16" font-weight="700" fill="#0E5A6B" text-anchor="start">RESULT PATH</text>
+<text x="255" y="813" font-family="DejaVu Sans,Arial,sans-serif" font-size="18" font-weight="400" fill="#1C2024" text-anchor="start">Structured CheckResult → runtime validation (Zod) → operator Review → Bengali handout</text>
+<rect x="52" y="865" width="382" height="145" rx="13" fill="#FAF9F6" stroke="#D9D5CB" stroke-width="1.7"/>
+<rect x="491" y="865" width="382" height="145" rx="13" fill="#FAF9F6" stroke="#D9D5CB" stroke-width="1.7"/>
+<rect x="930" y="865" width="382" height="145" rx="13" fill="#FAF9F6" stroke="#D9D5CB" stroke-width="1.7"/>
+<rect x="1369" y="865" width="382" height="145" rx="13" fill="#FAF9F6" stroke="#D9D5CB" stroke-width="1.7"/>
+<text x="75" y="905" font-family="DejaVu Sans,Arial,sans-serif" font-size="18" font-weight="700" fill="#0E5A6B" text-anchor="start">DATABASE + AUDIT</text>
+<text x="75" y="940" font-family="DejaVu Sans,Arial,sans-serif" font-size="16" font-weight="400" fill="#1C2024" text-anchor="start">Cases · consent · access events</text>
+<text x="75" y="969" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#4F5660" text-anchor="start">No raw PII in logs</text>
+<text x="514" y="905" font-family="DejaVu Sans,Arial,sans-serif" font-size="18" font-weight="700" fill="#0E5A6B" text-anchor="start">ENCRYPTED OBJECT STORE</text>
+<text x="514" y="940" font-family="DejaVu Sans,Arial,sans-serif" font-size="16" font-weight="400" fill="#1C2024" text-anchor="start">Temporary raw document blobs</text>
+<text x="514" y="969" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#4F5660" text-anchor="start">Short retention + deletion</text>
+<text x="953" y="905" font-family="DejaVu Sans,Arial,sans-serif" font-size="18" font-weight="700" fill="#2F7D4A" text-anchor="start">VERSIONED RULE PACKS</text>
+<text x="953" y="940" font-family="DejaVu Sans,Arial,sans-serif" font-size="16" font-weight="400" fill="#1C2024" text-anchor="start">Official links · versions · dates</text>
+<text x="953" y="969" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#4F5660" text-anchor="start">Manual review / publication</text>
+<text x="1392" y="905" font-family="DejaVu Sans,Arial,sans-serif" font-size="18" font-weight="700" fill="#0E5A6B" text-anchor="start">OBSERVABILITY</text>
+<text x="1392" y="940" font-family="DejaVu Sans,Arial,sans-serif" font-size="16" font-weight="400" fill="#1C2024" text-anchor="start">Metrics · opaque request IDs</text>
+<text x="1392" y="969" font-family="DejaVu Sans,Arial,sans-serif" font-size="15" font-weight="400" fill="#4F5660" text-anchor="start">Masked structured logs</text>
+<text x="52" y="1053" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="700" fill="#3B424A" text-anchor="start">BOUNDARY:  AI reads documents. Versioned deterministic rules evaluate cases. An authorized person approves and submits.</text>
+</svg>
