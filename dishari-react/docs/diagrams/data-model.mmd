@@ -1,0 +1,10 @@
+erDiagram
+ OPERATOR ||--o{ CASE : owns
+ CASE ||--o{ CONSENT_RECEIPT : has
+ CASE ||--o{ DOCUMENT : uploads
+ DOCUMENT ||--o{ EXTRACTED_FACT : yields
+ CASE ||--o{ MISMATCH : flags
+ CASE ||--o{ CASE_RULE_EVALUATION : evaluates
+ RULE_PACK ||--o{ CASE_RULE_EVALUATION : versions
+ CASE ||--o{ OPERATOR_REVIEW : confirms
+ OPERATOR ||--o{ AUDIT_EVENT : performs

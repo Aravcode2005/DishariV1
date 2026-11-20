@@ -1,0 +1,45 @@
+digraph Dishari {
+  graph [label="DISHARI  /  PROPOSED END-TO-END SYSTEM", labelloc=t, labeljust=l, fontsize=26, fontname="DejaVu Sans", fontcolor="#1C2024", rankdir=LR, bgcolor="#F5F3EE", nodesep=0.65, ranksep=1.1, pad=0.38, splines=polyline];
+  node [shape=box, style="rounded,filled", fontname="DejaVu Sans", fontsize=12, fontcolor="#1C2024", color="#D9D5CB", fillcolor="#FFFFFF", penwidth=1.3, margin="0.21,0.17"];
+  edge [color="#0E5A6B", arrowsize=0.75, penwidth=1.7, fontname="DejaVu Sans", fontsize=10, fontcolor="#3B424A"];
+  subgraph cluster_desk {
+    label="01  SERVICE CENTRE"; labeljust=l; fontsize=15; fontcolor="#0E5A6B"; style="rounded,filled"; color="#D9D5CB"; fillcolor="#FFFFFF"; margin=22;
+    citizen [label="Citizen\nConsent + documents", fillcolor="#E4EDEE"];
+    operator [label="Authorized operator\nChecks findings + prints", fillcolor="#E4EDEE"];
+    frontend [label="React + TypeScript UI\nUpload → Review → Bengali sheet", fillcolor="#E4EDEE", color="#0E5A6B", penwidth=2];
+    citizen -> operator [label="assisted"];
+    operator -> frontend [label="consents / checks"];
+  }
+  subgraph cluster_edge {
+    label="02  SECURE EDGE"; labeljust=l; fontsize=15; fontcolor="#0E5A6B"; style="rounded,filled"; color="#D9D5CB"; fillcolor="#FFFFFF"; margin=22;
+    api [label="HTTPS API / gateway\nAuth · throttling · CORS", fillcolor="#E4EDEE"];
+    consent [label="Case + consent service\nAudit receipt · retention", fillcolor="#E4EDEE"];
+    ingest [label="Secure ingestion\nValidate · scan · encrypt", fillcolor="#E4EDEE"];
+    api -> consent; consent -> ingest;
+  }
+  subgraph cluster_processing {
+    label="03  INTELLIGENCE & RULES  (BACKEND TO BUILD)"; labeljust=l; fontsize=15; fontcolor="#0E5A6B"; style="rounded,filled"; color="#D9D5CB"; fillcolor="#FFFFFF"; margin=22;
+    extract [label="OCR + Gemini\nField extraction + confidence"];
+    normalize [label="Normalizer\nStructured facts + provenance"];
+    audit [label="Mismatch audit\nName / date / field comparison", fillcolor="#FDEBE8", color="#B3261E"];
+    match [label="Deterministic rules engine\nVersioned official-source rules", fillcolor="#E7F3EA", color="#2F7D4A", penwidth=2];
+    summary [label="Bengali template service\nCitizen-readable summary", fillcolor="#E7F3EA"];
+    extract -> normalize -> audit -> match -> summary;
+  }
+  subgraph cluster_data {
+    label="04  PROTECTED DATA SERVICES"; labeljust=l; fontsize=15; fontcolor="#0E5A6B"; style="rounded,filled"; color="#D9D5CB"; fillcolor="#FFFFFF"; margin=22;
+    store [label="Temporary encrypted\ndocument object store"];
+    db [label="Case DB + audit log\nPII minimized"];
+    rulepack [label="Versioned rule packs\nSources · versions · dates", fillcolor="#FFF3D1", color="#A86B00"];
+    deletion [label="Deletion / retention worker\nRaw scans expire"];
+  }
+  portal [label="OFFICIAL GOVERNMENT PORTALS\nOperator signs in and submits manually", fillcolor="#FAF9F6", color="#8C8A80", penwidth=1.7];
+  frontend -> api [label="POST /cases/check\n(consent + selected files)"];
+  ingest -> extract [label="scanned input"];
+  ingest -> store [style=dashed, color="#8C8A80", constraint=false];
+  consent -> db [style=dashed, color="#8C8A80", constraint=false];
+  match -> rulepack [dir=back, style=dashed, color="#2F7D4A", label="published rules", constraint=false];
+  store -> deletion [style=dashed, color="#8C8A80", constraint=false];
+  summary -> frontend [color="#2F7D4A", constraint=false, label="validated CheckResult\n(no auto-submit)"];
+  frontend -> portal [style=dashed, constraint=false, color="#8C8A80", label="operator action only"];
+}
