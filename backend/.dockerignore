@@ -11,3 +11,6 @@ tmp/
 data/
 *.log
 .git/
+
+!app/data/
+!app/data/schemes_wb.json

@@ -1,0 +1,179 @@
+{
+  "case_id": "demo-001",
+  "ruleset_version": "2026.11.19c",
+  "stage": "awaiting_operator",
+  "consent": {
+    "given": true,
+    "timestamp": "2026-11-20T16:20:00+05:30",
+    "operator_id": "op-demo"
+  },
+  "documents": [
+    {
+      "doc_type": "aadhaar",
+      "fields": {
+        "name": "Mohammad Rafique",
+        "dob": "24-09-1996",
+        "address": "VILLAGE RAMPUR, MALDA, WEST BENGAL",
+        "aadhaar_number": "XXXX-XXXX-7146"
+      },
+      "usable": true
+    },
+    {
+      "doc_type": "khatian",
+      "fields": {
+        "name": "Md. Rafiq",
+        "address": "Village Rampur, Malda, West Bengal"
+      },
+      "usable": true
+    },
+    {
+      "doc_type": "bank_passbook",
+      "fields": {
+        "name": "Mohammad Rafique",
+        "address": "Village Rampur, Malda, West Bengal"
+      },
+      "usable": true
+    }
+  ],
+  "profile": {
+    "gender": "M",
+    "applicant_type": "sharecropper_bargadar",
+    "crop_or_activity_has_notified_sof": true,
+    "requested_limit_inr": 80000,
+    "age_years": 30,
+    "state_of_residence": "West Bengal",
+    "documents_present": [
+      "aadhaar",
+      "land_record_khatian",
+      "bank_passbook"
+    ]
+  },
+  "mismatches": [
+    {
+      "check_id": "XC_NAME",
+      "field": "name",
+      "values": [
+        {
+          "doc_type": "aadhaar",
+          "value": "Mohammad Rafique"
+        },
+        {
+          "doc_type": "khatian",
+          "value": "Md. Rafiq"
+        },
+        {
+          "doc_type": "bank_passbook",
+          "value": "Mohammad Rafique"
+        }
+      ],
+      "severity": "blocking",
+      "likely_outlier": "khatian",
+      "fix_route": {
+        "action": "Minor correction of Record of Rights — free, at the BL&LRO or banglarbhumi.gov.in.",
+        "is_inference": true
+      }
+    }
+  ],
+  "scheme_results": [
+    {
+      "scheme_id": "KCC_WB",
+      "verdict": "blocked_by_mismatch",
+      "rules_passed": [
+        "KCC_APPLICANT_TYPE",
+        "KCC_NO_MIN_LANDHOLDING",
+        "KCC_SOF_NOTIFIED",
+        "KCC_DOC_LAND_RECORD"
+      ],
+      "rules_failed": [],
+      "rules_undetermined": [],
+      "documents_missing": [],
+      "limit_cap_inr": null,
+      "note": null,
+      "lowest_confidence_used": "sourced_official",
+      "provisional": false,
+      "lookup_action": null,
+      "blocking_mismatches": [
+        "XC_NAME"
+      ],
+      "document_readiness": "complete"
+    },
+    {
+      "scheme_id": "WB_ANNAPURNA_YOJANA",
+      "verdict": "not_eligible",
+      "rules_passed": [
+        "ANN_AGE",
+        "ANN_RESIDENCE"
+      ],
+      "rules_failed": [
+        "ANN_GENDER"
+      ],
+      "rules_undetermined": [
+        "ANN_NOT_GOVT_EMPLOYEE",
+        "ANN_NOT_TAXPAYER",
+        "ANN_INCOME_CEILING"
+      ],
+      "documents_missing": [],
+      "limit_cap_inr": null,
+      "note": null,
+      "lowest_confidence_used": "sourced_official_summary",
+      "provisional": false,
+      "lookup_action": null,
+      "blocking_mismatches": [],
+      "document_readiness": "complete"
+    },
+    {
+      "scheme_id": "WB_BANGLAR_YUVA_SATHI",
+      "verdict": "cannot_determine",
+      "rules_passed": [
+        "YS_AGE",
+        "YS_RESIDENCE"
+      ],
+      "rules_failed": [],
+      "rules_undetermined": [
+        "YS_EDUCATION",
+        "YS_UNEMPLOYED",
+        "YS_NOT_YUVASREE",
+        "YS_NOT_OTHER_ALLOWANCE",
+        "YS_NOT_GOVT"
+      ],
+      "documents_missing": [],
+      "limit_cap_inr": null,
+      "note": null,
+      "lowest_confidence_used": "secondary_unverified",
+      "provisional": true,
+      "lookup_action": null,
+      "blocking_mismatches": [],
+      "document_readiness": "complete"
+    },
+    {
+      "scheme_id": "WB_PMJAY",
+      "verdict": "cannot_determine",
+      "rules_passed": [],
+      "rules_failed": [
+        "PMJAY_AGE_70"
+      ],
+      "rules_undetermined": [],
+      "documents_missing": [],
+      "limit_cap_inr": null,
+      "note": null,
+      "lowest_confidence_used": "secondary_unverified",
+      "provisional": true,
+      "lookup_action": {
+        "portal": "beneficiary.nha.gov.in",
+        "helpline": "14555",
+        "search_keys": [
+          "mobile_number_with_otp",
+          "name",
+          "ration_card_number"
+        ],
+        "in_person": "Arogya Mitra operator at an empanelled hospital searches the beneficiary list",
+        "confidence": "secondary_unverified"
+      },
+      "blocking_mismatches": [],
+      "document_readiness": "complete"
+    }
+  ],
+  "summary_bn": "আপনার নথিতে নামের অমিল পাওয়া গেছে। খতিয়ানে 'Md. Rafiq' লেখা আছে, কিন্তু আধার ও ব্যাঙ্ক পাসবইয়ে 'Mohammad Rafique' লেখা আছে। কিষাণ ক্রেডিট কার্ডের আবেদনের আগে এই অমিল ঠিক করতে হবে। BL&LRO অফিসে বিনামূল্যে রেকর্ড সংশোধন করা যায়। আয়ুষ্মান ভারত সম্পর্কে এখনও নিশ্চিত নয় — পোর্টালে যাচাই করুন।",
+  "explain_source": "llm",
+  "errors": []
+}

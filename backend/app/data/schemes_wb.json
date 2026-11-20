@@ -1,0 +1,870 @@
+{
+  "ruleset_version": "2026.11.19c",
+  "state": "West Bengal",
+  "notes": "Each rule carries its own `confidence` and `citation`. The engine must surface confidence in output. Never present a `secondary_unverified` rule to a citizen as settled fact.",
+  "confidence_levels": {
+    "sourced_official": "Stated on an official government page or circular. Safe to act on.",
+    "sourced_official_summary": "On an official state page, but a summary page compiled by the Information & Cultural Affairs Dept, not the line department. Treat as reliable but re-verify before production.",
+    "secondary_unverified": "Reported consistently by aggregators/news but NOT confirmed on an official portal. Show to the operator as 'verify at the office'. Do not auto-reject a citizen on this rule."
+  },
+  "schemes": [
+    {
+      "scheme_id": "KCC_WB",
+      "name_en": "Kisan Credit Card (KCC)",
+      "name_bn": "কিষাণ ক্রেডিট কার্ড",
+      "determination_method": "computable",
+      "demo_role": "PRIMARY. Best-sourced scheme in this file (a numbered RBI circular), and the only one whose required documents include the khatian — which is what makes the Aadhaar-vs-land-record mismatch audit matter.",
+      "department": "Banks (commercial / RRB / cooperative) under RBI; NABARD for RRBs and co-operatives. Interest subvention from the Union Ministry of Agriculture / Finance (MISS).",
+      "legal_basis": {
+        "current": {
+          "name": "RBI Master Circular on KCC Scheme",
+          "dated": "2017-07-03",
+          "applies_to": "Loans sanctioned before 2027-01-01, until maturity or renewal",
+          "confidence": "sourced_official"
+        },
+        "incoming": {
+          "name": "RBI [Commercial Banks - KCC Scheme] Directions, 2026",
+          "reference": "RBI/FIDD/2026-27/402",
+          "dated": "2026-06-19",
+          "effective_from": "2027-01-01",
+          "applies_to": "Loans sanctioned on or after 2027-01-01",
+          "note": "Parallel Directions issued the same day for Small Finance Banks, RRBs and Rural Co-operative Banks.",
+          "confidence": "sourced_official"
+        },
+        "ENGINE_WARNING": "Today's date is before 2027-01-01, so a new sanction right now still falls under the 2017 Master Circular. The rules below are from the 2026 Directions. Store both and pick by sanction date — do not hardcode one."
+      },
+      "required_fields": [
+        "applicant_type",
+        "crop_or_activity",
+        "cultivated_area_ha",
+        "has_land_record",
+        "has_tenancy_certificate",
+        "has_pri_cultivation_certificate",
+        "has_cultivation_affidavit",
+        "requested_limit_inr",
+        "date_of_birth"
+      ],
+      "eligibility_rules": [
+        {
+          "rule_id": "KCC_APPLICANT_TYPE",
+          "field": "applicant_type",
+          "op": "in",
+          "value": [
+            "owner_cultivator_individual",
+            "owner_cultivator_joint",
+            "tenant_farmer",
+            "oral_lessee",
+            "sharecropper_bargadar",
+            "shg",
+            "jlg",
+            "animal_husbandry_farmer",
+            "fisher",
+            "fish_farmer",
+            "allied_activity_farmer"
+          ],
+          "source_para": "RBI Directions 2026, para 12 (crop) and para 15 (allied)",
+          "proof_documents": [
+            "land_record_khatian",
+            "tenancy_certificate",
+            "pri_cultivation_certificate",
+            "cultivation_affidavit"
+          ],
+          "confidence": "sourced_official",
+          "blocking": true,
+          "operator_note_en": "Allied activities expressly include dairy, poultry, small ruminants, fisheries/aquaculture, sericulture, beekeeping and lac. Tenants and sharecroppers are eligible in both the crop and allied branches.",
+          "fail_message_en": "Applicant type is not covered by the KCC scheme.",
+          "fail_message_bn": "আবেদনকারীর শ্রেণি কিষাণ ক্রেডিট কার্ড প্রকল্পের আওতায় পড়ে না।"
+        },
+        {
+          "rule_id": "KCC_NO_MIN_LANDHOLDING",
+          "field": "cultivated_area_ha",
+          "op": "always_pass",
+          "source_para": "RBI Directions 2026, para 6 and para 13(7)",
+          "confidence": "sourced_official",
+          "blocking": false,
+          "operator_note_en": "There is NO minimum landholding. Marginal = up to 1 ha, small = over 1 to 2 ha. Flexi KCC of Rs 10,000-50,000 is available to marginal farmers without relating it to the value of the land. Never turn away a small farmer for 'too little land'."
+        },
+        {
+          "rule_id": "KCC_SOF_NOTIFIED",
+          "field": "crop_or_activity_has_notified_sof",
+          "op": "equals",
+          "value": true,
+          "source_para": "RBI Directions 2026, para 13",
+          "proof_documents": [
+            "none_required"
+          ],
+          "confidence": "sourced_official",
+          "blocking": true,
+          "operator_note_en": "Scale of Finance (SoF) is set by the SLTC/DLTC. A crop with no notified SoF falls outside KCC entirely.",
+          "fail_message_en": "This crop has no notified Scale of Finance, so it falls outside KCC.",
+          "fail_message_bn": "এই ফসলের জন্য নির্ধারিত স্কেল অফ ফাইন্যান্স নেই, তাই KCC-র আওতার বাইরে।"
+        }
+      ],
+      "document_alternatives": {
+        "description": "KCC land proof is an OR-chain with a conditional cap, not a single required document. This is the rule that lets a landless bargadar borrow.",
+        "source_para": "RBI Directions 2026, para 29 and para 30",
+        "confidence": "sourced_official",
+        "satisfied_if_any": [
+          {
+            "option_id": "KCC_DOC_LAND_RECORD",
+            "requires": [
+              "land_record_khatian"
+            ],
+            "limit_cap_inr": null,
+            "label_en": "Land record (RoR / khatian)",
+            "label_bn": "জমির রেকর্ড (খতিয়ান)"
+          },
+          {
+            "option_id": "KCC_DOC_TENANCY",
+            "requires": [
+              "tenancy_certificate"
+            ],
+            "limit_cap_inr": null,
+            "label_en": "Tenancy certificate or equivalent, per the bank's credit policy",
+            "label_bn": "ভাড়াটিয়া শংসাপত্র"
+          },
+          {
+            "option_id": "KCC_DOC_PRI_CERT",
+            "requires": [
+              "pri_cultivation_certificate"
+            ],
+            "limit_cap_inr": null,
+            "label_en": "Certificate from local administration or panchayati raj institution",
+            "label_bn": "পঞ্চায়েত/স্থানীয় প্রশাসনের শংসাপত্র",
+            "operator_note_en": "Banks SHALL accept these for sharecroppers and oral lessees."
+          },
+          {
+            "option_id": "KCC_DOC_AFFIDAVIT",
+            "requires": [
+              "cultivation_affidavit"
+            ],
+            "limit_cap_inr": 50000,
+            "label_en": "Affidavit of occupational status (land tilled / crops grown)",
+            "label_bn": "চাষের হলফনামা",
+            "operator_note_en": "Fallback where a PRI certificate is hard to obtain. Valid ONLY for loans up to Rs 50,000."
+          }
+        ],
+        "west_bengal_note": {
+          "text": "A bargadar recorded in the Record of Rights can show the khatian with the barga entry as the land record. An unrecorded bargadar falls back to the PRI certificate or the affidavit route.",
+          "confidence": "inference",
+          "operator_note_en": "This mapping is Dishari's reading of para 29/30 against WB's barga recording practice, not a published RBI or WB instruction."
+        }
+      },
+      "computed_values": [
+        {
+          "value_id": "KCC_DRAWING_LIMIT",
+          "label_en": "Seasonal drawing limit",
+          "formula": "(sof_per_ha * cultivated_area_ha) + (0.10 * base) + (0.20 * base) + insurance_premium",
+          "where": {
+            "base": "sof_per_ha * cultivated_area_ha",
+            "0.10": "post-harvest and household consumption",
+            "0.20": "farm asset repairs, maintenance and technical services"
+          },
+          "rounding": "nearest Rs 1,000",
+          "escalation": "Maximum Permissible Limit rises by a notional 10% each season. If SoF is not notified for a season, apply a 10% hike over the previous SoF.",
+          "tenure_years": 6,
+          "source_para": "RBI Directions 2026, para 13",
+          "confidence": "sourced_official",
+          "engine_note": "Dishari should NOT quote a final sanctioned amount to a citizen. Show it as an indicative range and mark it provisional — the bank sets the actual limit."
+        }
+      ],
+      "collateral_rules": [
+        {
+          "threshold_inr": 200000,
+          "requirement": "No collateral",
+          "source_para": "para 23",
+          "confidence": "sourced_official"
+        },
+        {
+          "threshold_inr": 300000,
+          "requirement": "No collateral where there is crop hypothecation and a recovery tie-up",
+          "source_para": "para 25",
+          "confidence": "sourced_official"
+        }
+      ],
+      "interest_subvention": {
+        "scheme": "Modified Interest Subvention Scheme (MISS)",
+        "base_rate_pct": 7,
+        "subvention_to_banks_pct": 1.5,
+        "prompt_repayment_incentive_pct": 3,
+        "effective_rate_pct": 4,
+        "limit_inr": 300000,
+        "allied_only_limit_inr": 200000,
+        "confidence": "sourced_official",
+        "DISPUTED": {
+          "issue": "Whether the subvention limit is Rs 3 lakh or Rs 5 lakh",
+          "evidence_for_3L": "PIB Release 2106230 (Ministry of Finance, 25 Feb 2025) states Rs 3 lakh; a secondary report says the RBI circular of 13 Jan 2026 still uses Rs 3 lakh",
+          "evidence_for_5L": "Union Budget 2025-26 speech (1 Feb 2025) announced enhancement from Rs 3 lakh to Rs 5 lakh; a later PIB backgrounder says it 'has been raised'",
+          "engine_instruction": "DO NOT display either figure as settled. Show 'Rs 3-5 lakh, confirm with the bank'. Never quote an interest limit to a citizen on stage."
+        }
+      },
+      "bank_policy_layer": {
+        "description": "Configurable per bank. NOT in the RBI Directions. Keep separate so a wrong bank rule never looks like an RBI rule.",
+        "confidence": "secondary_unverified",
+        "rules": [
+          {
+            "rule_id": "KCC_AGE_BANK",
+            "field": "age_years",
+            "op": "between",
+            "value": [
+              18,
+              75
+            ],
+            "proof_documents": [
+              "aadhaar",
+              "epic"
+            ],
+            "blocking": false,
+            "operator_note_en": "RBI sets no age limit. 18-75 is common bank policy; some banks read 75 as age at end of tenure. Confirm with the branch.",
+            "fail_message_en": "Age may fall outside the bank's policy range — confirm at the branch.",
+            "fail_message_bn": "বয়স ব্যাঙ্কের নীতির বাইরে হতে পারে — শাখায় যাচাই করুন।"
+          },
+          {
+            "rule_id": "KCC_COBORROWER_OVER_60",
+            "condition": "age_years > 60",
+            "field": "has_coborrower_legal_heir",
+            "op": "equals",
+            "value": true,
+            "blocking": false,
+            "operator_note_en": "Many banks require a legal-heir co-borrower above 60. Bank policy, not RBI.",
+            "fail_message_en": "A legal-heir co-borrower may be required.",
+            "fail_message_bn": "আইনি উত্তরাধিকারী সহ-ঋণগ্রহীতা প্রয়োজন হতে পারে।"
+          }
+        ]
+      },
+      "exclusions": [
+        {
+          "exclusion_id": "KCC_EX_NO_SOF",
+          "description_en": "Crop or activity with no notified Scale of Finance",
+          "confidence": "sourced_official"
+        },
+        {
+          "exclusion_id": "KCC_EX_AFFIDAVIT_CAP",
+          "description_en": "Affidavit-only applicant requesting more than Rs 50,000",
+          "confidence": "sourced_official"
+        },
+        {
+          "exclusion_id": "KCC_EX_BANK_DEFAULT",
+          "description_en": "Existing default — bank-level check, not in the RBI text",
+          "confidence": "secondary_unverified"
+        }
+      ],
+      "cross_check_relevance": [
+        "XC_NAME: THE hero case. KCC requires the land record, so a name mismatch between Aadhaar and the khatian blocks the application. Fix route: free minor correction of the Record of Rights at the BL&LRO or banglarbhumi.gov.in.",
+        "XC_NAME: a mismatch between Aadhaar and the bank passbook blocks disbursal separately — a different fix, at the bank branch.",
+        "XC_AADHAAR_SEEDING: needed for subvention and DBT credit; cannot be read off a passbook photo."
+      ],
+      "linked_schemes": [
+        {
+          "name": "Bangla Shasya Bima (BSB)",
+          "relevance": "Loanee farmers on seasonal crop loans are covered compulsorily; non-loanee farmers may opt in. All farmers including sharecroppers and tenant farmers growing notified crops in notified areas are eligible. Sum insured per hectare equals the DLTC Scale of Finance.",
+          "source": "IRDAI-filed policy document, 2019-20 version",
+          "confidence": "sourced_official",
+          "caveat": "Current-season notification and premium terms NOT verified."
+        },
+        {
+          "name": "Krishak Bandhu / Mukhyamantri Krishak Samman Nidhi",
+          "relevance": "Income support, not credit. Relevant only because it uses the same RoR and bargadar documents.",
+          "confidence": "secondary_unverified",
+          "caveat": "Reported recast by notification 1128-AG dated 29 Oct 2026. UNVERIFIED — do not encode as a scheme yet."
+        }
+      ],
+      "open_questions": [
+        "MISS subvention limit: Rs 3 lakh vs Rs 5 lakh unresolved.",
+        "Bank age policy not verified on any official bank page.",
+        "Whether KCC can be applied for via CSC or the PM-Kisan portal in WB — no official source retrieved.",
+        "Current-season Scale of Finance values for WB districts not retrieved; the engine needs an SoF table before the limit formula can run."
+      ]
+    },
+    {
+      "scheme_id": "WB_ANNAPURNA_YOJANA",
+      "name_en": "Annapurna Yojana (West Bengal)",
+      "name_bn": "অন্নপূর্ণা যোজনা",
+      "disambiguation": "NOT the central NSAP Annapurna foodgrain scheme, and NOT the legacy Annapurna catering loan. This is the West Bengal state women's cash transfer that replaced Lakshmir Bhandar.",
+      "department": "Women & Child Development and Social Welfare, Govt. of West Bengal",
+      "notification": {
+        "number": "No. 2411-WCD/O/AB-4/2026 dated 19 May 2026",
+        "confidence": "secondary_unverified"
+      },
+      "benefit": {
+        "type": "cash_transfer",
+        "amount_inr": 3000,
+        "frequency": "monthly",
+        "mode": "DBT",
+        "confidence": "sourced_official_summary"
+      },
+      "application_channel": {
+        "offline": "Family Level Data Collection form at BDO / SDO office, or KMC ward office",
+        "online": "socialregistry.wb.gov.in",
+        "confidence": "sourced_official_summary"
+      },
+      "primary_source": {
+        "url": "https://wb.gov.in/government-schemes-details-annaapurna-yojana.aspx",
+        "retrieved": "2026-06-26",
+        "publisher": "Government of West Bengal"
+      },
+      "required_fields": [
+        "gender",
+        "date_of_birth",
+        "state_of_residence",
+        "is_permanent_govt_employee",
+        "is_income_tax_payer"
+      ],
+      "eligibility_rules": [
+        {
+          "rule_id": "ANN_GENDER",
+          "field": "gender",
+          "op": "equals",
+          "value": "F",
+          "proof_documents": [
+            "aadhaar",
+            "epic"
+          ],
+          "confidence": "sourced_official_summary",
+          "blocking": true,
+          "fail_message_en": "This scheme is for women applicants only.",
+          "fail_message_bn": "এই প্রকল্পটি শুধুমাত্র মহিলা আবেদনকারীদের জন্য।"
+        },
+        {
+          "rule_id": "ANN_AGE",
+          "field": "age_years",
+          "op": "between",
+          "value": [
+            25,
+            60
+          ],
+          "derived_from": "date_of_birth",
+          "proof_documents": [
+            "aadhaar",
+            "epic",
+            "birth_certificate"
+          ],
+          "confidence": "sourced_official_summary",
+          "blocking": true,
+          "fail_message_en": "Age must be between 25 and 60 years.",
+          "fail_message_bn": "বয়স ২৫ থেকে ৬০ বছরের মধ্যে হতে হবে।"
+        },
+        {
+          "rule_id": "ANN_RESIDENCE",
+          "field": "state_of_residence",
+          "op": "equals",
+          "value": "West Bengal",
+          "proof_documents": [
+            "aadhaar",
+            "epic"
+          ],
+          "confidence": "sourced_official_summary",
+          "blocking": true,
+          "fail_message_en": "Applicant must be a resident of West Bengal.",
+          "fail_message_bn": "আবেদনকারীকে পশ্চিমবঙ্গের বাসিন্দা হতে হবে।"
+        },
+        {
+          "rule_id": "ANN_NOT_GOVT_EMPLOYEE",
+          "field": "is_permanent_govt_employee",
+          "op": "equals",
+          "value": false,
+          "proof_documents": [
+            "self_declaration"
+          ],
+          "confidence": "sourced_official_summary",
+          "blocking": true,
+          "fail_message_en": "Permanent government employees are not eligible.",
+          "fail_message_bn": "স্থায়ী সরকারি কর্মচারীরা এই প্রকল্পের জন্য যোগ্য নন।"
+        },
+        {
+          "rule_id": "ANN_NOT_TAXPAYER",
+          "field": "is_income_tax_payer",
+          "op": "equals",
+          "value": false,
+          "proof_documents": [
+            "self_declaration"
+          ],
+          "confidence": "sourced_official_summary",
+          "blocking": true,
+          "fail_message_en": "Income-tax payers are not eligible.",
+          "fail_message_bn": "আয়কর প্রদানকারীরা এই প্রকল্পের জন্য যোগ্য নন।"
+        },
+        {
+          "rule_id": "ANN_INCOME_CEILING",
+          "field": "monthly_individual_income_inr",
+          "op": "lte",
+          "value": 10000,
+          "proof_documents": [
+            "income_certificate"
+          ],
+          "confidence": "secondary_unverified",
+          "blocking": false,
+          "operator_note_en": "Reported income ceiling of Rs 10,000/month (individual) and Rs 12 lakh/year (family). NOT confirmed on an official source. Ask at the BDO office before telling the citizen they are ineligible.",
+          "fail_message_en": "Reported income ceiling may apply — verify at the office.",
+          "fail_message_bn": "আয়ের সীমা প্রযোজ্য হতে পারে — অফিসে যাচাই করুন।"
+        }
+      ],
+      "required_documents": [
+        {
+          "doc_id": "epic",
+          "label_en": "Voter ID (EPIC)",
+          "label_bn": "ভোটার কার্ড",
+          "mandatory": true,
+          "confidence": "sourced_official_summary"
+        },
+        {
+          "doc_id": "aadhaar",
+          "label_en": "Aadhaar card",
+          "label_bn": "আধার কার্ড",
+          "mandatory": true,
+          "confidence": "sourced_official_summary"
+        },
+        {
+          "doc_id": "active_mobile",
+          "label_en": "Active mobile number",
+          "label_bn": "সক্রিয় মোবাইল নম্বর",
+          "mandatory": true,
+          "confidence": "sourced_official_summary"
+        },
+        {
+          "doc_id": "bank_passbook",
+          "label_en": "Bank passbook (Aadhaar-seeded, for DBT)",
+          "label_bn": "ব্যাঙ্ক পাসবই",
+          "mandatory": true,
+          "confidence": "secondary_unverified",
+          "operator_note_en": "Implied by DBT payment mode; not listed explicitly on the official page."
+        }
+      ],
+      "exclusions": [
+        {
+          "exclusion_id": "ANN_EX_GOVT",
+          "description_en": "In permanent government employment",
+          "confidence": "sourced_official_summary"
+        },
+        {
+          "exclusion_id": "ANN_EX_TAX",
+          "description_en": "Income-tax payer",
+          "confidence": "sourced_official_summary"
+        }
+      ],
+      "open_questions": [
+        "Official notification 2411-WCD/O/AB-4/2026 PDF not retrieved — income limits unconfirmed.",
+        "Migration rules for existing Lakshmir Bhandar beneficiaries unconfirmed."
+      ]
+    },
+    {
+      "scheme_id": "WB_BANGLAR_YUVA_SATHI",
+      "name_en": "Banglar Yuva Sathi Prakalpa",
+      "name_bn": "বাংলার যুব সাথী প্রকল্প",
+      "disambiguation": "NOT Yuvasree / Yuvashree Prakalpa (Labour Dept, 2013, Employment Bank registration) and NOT Yuvashree Arpan (2019, enterprise grant). Yuva Sathi launched 2026 under Youth Services & Sports. A Yuvasree beneficiary is excluded from Yuva Sathi.",
+      "department": "Department of Youth Services & Sports, Govt. of West Bengal",
+      "benefit": {
+        "type": "cash_transfer",
+        "amount_inr": 1500,
+        "frequency": "monthly",
+        "mode": "DBT to Aadhaar-linked bank account",
+        "max_duration_years": 5,
+        "max_total_inr": 90000,
+        "ends_on": "employment_secured_or_5_years_whichever_earlier",
+        "confidence": "secondary_unverified"
+      },
+      "application_channel": {
+        "online": "yubasathi.wb.gov.in",
+        "offline": "Registration camps across all 294 assembly constituencies (Duare Sarkar style)",
+        "phase_1_window": "2026-02-15 to 2026-02-26 (CLOSED)",
+        "confidence": "secondary_unverified",
+        "operator_note_en": "Phase 1 applications closed 26 Feb 2026. Check whether a new phase is open before telling a citizen to apply."
+      },
+      "primary_source": {
+        "url": "https://schemes.vikaspedia.in/viewcontent/schemesall/state-specific-schemes/welfare-schemes-of-west-bengal/yuva-sathi-yojna-(banglar-yuva-sathi)-%E2%80%93-west-bengal",
+        "publisher": "Vikaspedia (C-DAC / MeitY)",
+        "warning": "No page on the official yubasathi.wb.gov.in portal was retrieved. ALL rules below are secondary_unverified. Verify before production use."
+      },
+      "required_fields": [
+        "date_of_birth",
+        "state_of_residence",
+        "highest_qualification",
+        "employment_status",
+        "receives_yuvasree",
+        "receives_other_state_allowance",
+        "is_govt_employee_or_pensioner"
+      ],
+      "eligibility_rules": [
+        {
+          "rule_id": "YS_AGE",
+          "field": "age_years",
+          "op": "between",
+          "value": [
+            21,
+            40
+          ],
+          "derived_from": "date_of_birth",
+          "as_on_date": "2026-04-01",
+          "proof_documents": [
+            "aadhaar",
+            "madhyamik_certificate",
+            "birth_certificate"
+          ],
+          "confidence": "secondary_unverified",
+          "blocking": true,
+          "operator_note_en": "Age is computed as on 1 April 2026, not today's date. Reference date may change in a later phase.",
+          "fail_message_en": "Age must be between 21 and 40 years as on 1 April 2026.",
+          "fail_message_bn": "১ এপ্রিল ২০২৬ তারিখে বয়স ২১ থেকে ৪০ বছরের মধ্যে হতে হবে।"
+        },
+        {
+          "rule_id": "YS_EDUCATION",
+          "field": "highest_qualification_level",
+          "op": "gte",
+          "value": 10,
+          "value_label": "Passed Madhyamik (Class 10) or equivalent",
+          "proof_documents": [
+            "madhyamik_certificate",
+            "madhyamik_admit_card"
+          ],
+          "confidence": "secondary_unverified",
+          "blocking": true,
+          "fail_message_en": "Applicant must have passed Madhyamik (Class 10) or equivalent.",
+          "fail_message_bn": "আবেদনকারীকে মাধ্যমিক বা সমতুল্য পরীক্ষায় উত্তীর্ণ হতে হবে।"
+        },
+        {
+          "rule_id": "YS_UNEMPLOYED",
+          "field": "employment_status",
+          "op": "equals",
+          "value": "unemployed",
+          "proof_documents": [
+            "self_declaration"
+          ],
+          "confidence": "secondary_unverified",
+          "blocking": true,
+          "fail_message_en": "Applicant must be currently unemployed.",
+          "fail_message_bn": "আবেদনকারীকে বর্তমানে বেকার হতে হবে।"
+        },
+        {
+          "rule_id": "YS_RESIDENCE",
+          "field": "state_of_residence",
+          "op": "equals",
+          "value": "West Bengal",
+          "requires_permanent": true,
+          "proof_documents": [
+            "aadhaar",
+            "epic",
+            "residence_certificate"
+          ],
+          "confidence": "secondary_unverified",
+          "blocking": true,
+          "fail_message_en": "Applicant must be a permanent resident of West Bengal.",
+          "fail_message_bn": "আবেদনকারীকে পশ্চিমবঙ্গের স্থায়ী বাসিন্দা হতে হবে।"
+        },
+        {
+          "rule_id": "YS_NOT_YUVASREE",
+          "field": "receives_yuvasree",
+          "op": "equals",
+          "value": false,
+          "proof_documents": [
+            "self_declaration"
+          ],
+          "confidence": "secondary_unverified",
+          "blocking": true,
+          "fail_message_en": "Existing Yuvasree beneficiaries cannot apply for Yuva Sathi.",
+          "fail_message_bn": "যুবশ্রী প্রাপকরা যুব সাথী প্রকল্পের জন্য আবেদন করতে পারবেন না।"
+        },
+        {
+          "rule_id": "YS_NOT_OTHER_ALLOWANCE",
+          "field": "receives_other_state_allowance",
+          "op": "equals",
+          "value": false,
+          "exception_note_en": "Scholarships and educational benefits do NOT count as a disqualifying allowance.",
+          "proof_documents": [
+            "self_declaration"
+          ],
+          "confidence": "secondary_unverified",
+          "blocking": true,
+          "fail_message_en": "Applicant must not be receiving another state government allowance (scholarships excepted).",
+          "fail_message_bn": "অন্য কোনো রাজ্য সরকারি ভাতা প্রাপক হলে যোগ্য নন (বৃত্তি ব্যতীত)।"
+        },
+        {
+          "rule_id": "YS_NOT_GOVT",
+          "field": "is_govt_employee_or_pensioner",
+          "op": "equals",
+          "value": false,
+          "proof_documents": [
+            "self_declaration"
+          ],
+          "confidence": "secondary_unverified",
+          "blocking": true,
+          "fail_message_en": "Government employees and pensioners are not eligible.",
+          "fail_message_bn": "সরকারি কর্মচারী ও পেনশনভোগীরা যোগ্য নন।"
+        }
+      ],
+      "required_documents": [
+        {
+          "doc_id": "aadhaar",
+          "label_en": "Aadhaar card",
+          "label_bn": "আধার কার্ড",
+          "mandatory": true,
+          "confidence": "secondary_unverified"
+        },
+        {
+          "doc_id": "madhyamik_certificate",
+          "label_en": "Madhyamik certificate or admit card",
+          "label_bn": "মাধ্যমিকের সার্টিফিকেট",
+          "mandatory": true,
+          "confidence": "secondary_unverified"
+        },
+        {
+          "doc_id": "epic",
+          "label_en": "Voter ID (EPIC)",
+          "label_bn": "ভোটার কার্ড",
+          "mandatory": true,
+          "confidence": "secondary_unverified"
+        },
+        {
+          "doc_id": "bank_passbook",
+          "label_en": "Aadhaar-seeded bank passbook",
+          "label_bn": "আধার-সংযুক্ত ব্যাঙ্ক পাসবই",
+          "mandatory": true,
+          "confidence": "secondary_unverified"
+        }
+      ],
+      "exclusions": [
+        {
+          "exclusion_id": "YS_EX_YUVASREE",
+          "description_en": "Already a Yuvasree / Yuvashree Arpan beneficiary",
+          "confidence": "secondary_unverified"
+        },
+        {
+          "exclusion_id": "YS_EX_SOCIAL_SECURITY",
+          "description_en": "Covered under another social security scheme",
+          "confidence": "secondary_unverified"
+        },
+        {
+          "exclusion_id": "YS_EX_GOVT",
+          "description_en": "Government employee or pensioner",
+          "confidence": "secondary_unverified"
+        }
+      ],
+      "open_questions": [
+        "No official yubasathi.wb.gov.in rules page retrieved — every rule here needs official confirmation.",
+        "Exact definition of 'covered under any social security scheme' is unclear and may overlap with Annapurna Yojana.",
+        "Whether the 1 April 2026 age reference date carries into later phases."
+      ]
+    },
+    {
+      "scheme_id": "WB_PMJAY",
+      "name_en": "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana (AB PM-JAY)",
+      "name_bn": "আয়ুষ্মান ভারত প্রধানমন্ত্রী জন আরোগ্য যোজना",
+      "determination_method": "hybrid",
+      "department": "National Health Authority (NHA), Ministry of Health & Family Welfare, with the West Bengal State Health Agency",
+      "critical_architecture_note": "DO NOT write computable eligibility rules for the main PM-JAY branch. Inclusion is not through registration; it is based on the SECC 2011 database. No combination of Aadhaar, ration card or income certificate can establish eligibility. Documents verify identity AGAINST the list; they do not create entitlement. Dishari's correct output here is `cannot_determine` plus a lookup action.",
+      "west_bengal_status": {
+        "summary": "West Bengal implemented PM-JAY in September 2018, withdrew on 10 January 2019 in favour of Swasthya Sathi, and rejoined in 2026 as the 36th and final State/UT.",
+        "mou_signed": "2026-06-08",
+        "rollout_date_reported": [
+          "2026-07-01",
+          "2026-08-16"
+        ],
+        "rollout_date_conflict": true,
+        "confidence": "secondary_unverified",
+        "operator_note_en": "Sources disagree on whether benefits began 1 July or 16 August 2026. Do not quote a launch date to a citizen. The MoU date (8 June 2026) is the better-corroborated fact."
+      },
+      "benefit": {
+        "type": "health_insurance",
+        "cover_inr": 500000,
+        "basis": "per family per year",
+        "scope": "Cashless, paperless secondary and tertiary hospitalisation at empanelled public and private hospitals",
+        "portability": "Usable at empanelled hospitals nationwide",
+        "confidence": "secondary_unverified"
+      },
+      "eligibility_branches": [
+        {
+          "branch_id": "PMJAY_SECC",
+          "label_en": "Main branch — SECC 2011 entitlement",
+          "determination_method": "external_lookup",
+          "verdict_when_matched_locally": "cannot_determine",
+          "basis": {
+            "rural": "Families meeting at least one of six deprivation criteria (D1-D5 and D7), plus automatically included categories such as destitute/living on alms and manual scavenger households",
+            "urban": "Eleven occupational categories, including street vendors, cobblers, hawkers, construction workers, plumbers, masons, domestic workers, sweepers, sanitation workers, home-based artisans and transport workers",
+            "confidence": "secondary_unverified"
+          },
+          "lookup_action": {
+            "portal": "beneficiary.nha.gov.in",
+            "helpline": "14555",
+            "search_keys": [
+              "mobile_number_with_otp",
+              "name",
+              "ration_card_number"
+            ],
+            "in_person": "Arogya Mitra operator at an empanelled hospital searches the beneficiary list",
+            "confidence": "secondary_unverified"
+          },
+          "operator_instruction_en": "Run the lookup at beneficiary.nha.gov.in using the citizen's mobile or ration card number. Dishari cannot answer this from documents.",
+          "operator_instruction_bn": "নথি দেখে এই যোগ্যতা নির্ধারণ করা যায় না — beneficiary.nha.gov.in পোর্টালে যাচাই করতে হবে।"
+        },
+        {
+          "branch_id": "PMJAY_SENIOR_70",
+          "label_en": "Senior citizen branch — age 70 and above",
+          "determination_method": "computable",
+          "verdict_when_matched_locally": "eligible_provisional",
+          "eligibility_rules": [
+            {
+              "rule_id": "PMJAY_AGE_70",
+              "field": "age_years",
+              "op": "gte",
+              "value": 70,
+              "derived_from": "date_of_birth",
+              "proof_documents": [
+                "aadhaar",
+                "epic",
+                "birth_certificate"
+              ],
+              "confidence": "secondary_unverified",
+              "blocking": true,
+              "operator_note_en": "The 70+ expansion applies irrespective of economic status, so no income or SECC test is needed on this branch. A senior already covered by another government health scheme may reportedly use PM-JAY additionally — verify before advising.",
+              "fail_message_en": "Under 70 — check the main SECC branch instead via the NHA portal.",
+              "fail_message_bn": "৭০ বছরের কম — মূল তালিকা পোর্টালে যাচাই করুন।"
+            }
+          ],
+          "still_requires": "Ayushman card generation at beneficiary.nha.gov.in or a CSC, after identity verification."
+        }
+      ],
+      "required_documents": [
+        {
+          "doc_id": "aadhaar",
+          "label_en": "Aadhaar card",
+          "label_bn": "আধার কার্ড",
+          "mandatory": true,
+          "purpose": "identity verification against the beneficiary list, not proof of eligibility",
+          "confidence": "secondary_unverified"
+        },
+        {
+          "doc_id": "ration_card",
+          "label_en": "Ration card",
+          "label_bn": "রেশন কার্ড",
+          "mandatory": true,
+          "purpose": "household search key in the beneficiary database",
+          "confidence": "secondary_unverified"
+        },
+        {
+          "doc_id": "active_mobile",
+          "label_en": "Active mobile number (for OTP)",
+          "label_bn": "সক্রিয় মোবাইল নম্বর",
+          "mandatory": true,
+          "confidence": "secondary_unverified"
+        }
+      ],
+      "cross_check_relevance": [
+        "XC_NAME: a name mismatch between Aadhaar and the ration card is the single most common reason a beneficiary search fails, because the ration card is a primary search key.",
+        "XC_DOB: critical for the 70+ branch — an Aadhaar DOB of '01-01-1955' style placeholder must be flagged as low-confidence, not treated as exact."
+      ],
+      "open_questions": [
+        "No official pmjay.gov.in or West Bengal State Health Agency page was retrieved. Every rule here is secondary_unverified.",
+        "Exact WB rollout date (1 July vs 16 August 2026) unresolved.",
+        "Whether existing Swasthya Sathi households were auto-migrated into the PM-JAY beneficiary list, or must be looked up individually.",
+        "Whether the full SECC D1-D7 criteria list as applied in WB differs from the national list."
+      ],
+      "primary_sources": [
+        {
+          "url": "https://myscheme.gov.in/schemes/ab-pmjay",
+          "publisher": "myScheme (Govt of India)",
+          "note": "SECC basis and Arogya Mitra lookup process"
+        },
+        {
+          "url": "https://beneficiary.nha.gov.in",
+          "publisher": "National Health Authority",
+          "note": "Beneficiary lookup portal — NOT retrieved, cited from secondary descriptions"
+        }
+      ],
+      "demo_role": "Secondary. Its value is demonstrating restraint: the engine returns cannot_determine instead of guessing. Lead with KCC instead."
+    }
+  ],
+  "cross_document_checks": {
+    "description": "Fields that must agree across documents before submission. A mismatch here blocks the application regardless of eligibility.",
+    "checks": [
+      {
+        "check_id": "XC_NAME",
+        "field": "full_name",
+        "compare_across": [
+          "aadhaar",
+          "epic",
+          "bank_passbook",
+          "madhyamik_certificate"
+        ],
+        "match_type": "normalized_fuzzy",
+        "severity_on_conflict": "blocking",
+        "fix_routes": {
+          "aadhaar_is_outlier": "Update name at an Aadhaar enrolment/update centre (UIDAI).",
+          "bank_is_outlier": "Update KYC name at the bank branch.",
+          "epic_is_outlier": "Form 8 correction with the Electoral Registration Officer.",
+          "land_record_is_outlier": "Minor correction of Record of Rights — free, at the BL&LRO or banglarbhumi.gov.in."
+        },
+        "fix_route_confidence": "inference",
+        "operator_note_en": "No official West Bengal rule states which record to correct when they differ. These routes are Dishari's logic, not a published rule."
+      },
+      {
+        "check_id": "XC_DOB",
+        "field": "date_of_birth",
+        "compare_across": [
+          "aadhaar",
+          "epic",
+          "madhyamik_certificate",
+          "birth_certificate"
+        ],
+        "match_type": "exact_date",
+        "severity_on_conflict": "blocking",
+        "operator_note_en": "Madhyamik certificate DOB is usually treated as authoritative for age in education-linked schemes. Partial dates (year only) should be flagged as 'incomplete', not 'conflict'."
+      },
+      {
+        "check_id": "XC_ADDRESS",
+        "field": "address_district_pin",
+        "compare_across": [
+          "aadhaar",
+          "epic",
+          "bank_passbook"
+        ],
+        "match_type": "normalized_fuzzy",
+        "severity_on_conflict": "warning",
+        "operator_note_en": "Address drift is common and rarely blocks on its own, but PIN/district mismatch can break the residence rule."
+      },
+      {
+        "check_id": "XC_AADHAAR_SEEDING",
+        "field": "bank_account_aadhaar_seeded",
+        "compare_across": [
+          "bank_passbook"
+        ],
+        "match_type": "boolean_present",
+        "severity_on_conflict": "warning",
+        "operator_note_en": "DBT fails without Aadhaar seeding. Dishari CANNOT verify NPCI seeding status from a passbook photo — flag for the operator to check separately."
+      }
+    ]
+  },
+  "operator_output_contract": {
+    "description": "What the engine must return per scheme, so the operator and the citizen summary can be generated.",
+    "fields": [
+      "scheme_id",
+      "verdict: eligible | not_eligible | cannot_determine",
+      "rules_passed: [{rule_id, proved_by_document}]",
+      "rules_failed: [{rule_id, fail_message_bn, blocking}]",
+      "rules_undetermined: [{rule_id, missing_field, missing_documents}]",
+      "documents_missing: [doc_id]",
+      "blocking_mismatches: [check_id]",
+      "lowest_confidence_used: sourced_official | sourced_official_summary | secondary_unverified"
+    ],
+    "rule": "If any rule used is secondary_unverified, the verdict must be shown as provisional and the citizen summary must say 'verify at the office'."
+  },
+  "determination_methods": {
+    "computable": "Every eligibility rule can be tested from fields extracted off the citizen's documents. Dishari can return a real verdict.",
+    "external_lookup": "Eligibility is NOT computable from documents. It is decided by a pre-built government database. Dishari must return `cannot_determine` and hand the operator a lookup action. Its job here is document readiness and the lookup, never a verdict.",
+    "hybrid": "Most of the scheme is external_lookup, but one branch is computable (e.g. an age-based universal entitlement)."
+  },
+  "demo_narrative": {
+    "description": "One family, one scan, two departments, one blocked claim saved.",
+    "steps": [
+      "Farmer comes in for KCC. Dishari reads his Aadhaar, khatian and bank passbook.",
+      "AUDIT FIRES: the khatian name does not match Aadhaar. KCC requires the land record, so this is BLOCKING, not a warning.",
+      "FIX ROUTE: minor correction of the Record of Rights - free, at the BL&LRO or banglarbhumi.gov.in. Tell him what to bring.",
+      "WHOLE-FAMILY MATCH: his wife, 34, qualifies for Annapurna Yojana at Rs 3,000 a month. Nobody asked about it.",
+      "OPTIONAL CLOSER: his father is 71. PM-JAY returns cannot_determine with a lookup action, because the engine refuses to guess from documents."
+    ],
+    "departments_touched": [
+      "Banks/RBI + Agriculture",
+      "Land & Land Reforms",
+      "Women & Child Development",
+      "Health/NHA"
+    ]
+  }
+}

@@ -98,3 +98,26 @@ def test_unexpected_error_is_sanitized_and_workflow_fails(settings, monkeypatch)
         assert response.headers["x-request-id"] == response.json()["request_id"]
         record = next(iter(client.app.state.repository._workflows.values()))
         assert record.state == "failed"
+
+
+@pytest.mark.parametrize("origin,allowed", [("http://localhost:5173", True), ("https://unlisted.example", False)])
+def test_unexpected_error_remains_readable_under_cors(settings, monkeypatch, origin, allowed):
+    from fastapi.testclient import TestClient
+    from app.main import create_app
+
+    def fail(facts):
+        raise RuntimeError("private-error-details")
+
+    with TestClient(create_app(settings), raise_server_exceptions=False) as client:
+        monkeypatch.setattr(client.app.state.rules_engine, "evaluate", fail)
+        response = client.post("/api/v1/workflows", json={}, headers={"Origin": origin})
+        assert response.status_code == 500
+        assert response.json()["code"] == "INTERNAL_ERROR"
+        assert response.json()["request_id"] == response.headers["x-request-id"]
+        assert "private-error-details" not in response.text
+        if allowed:
+            assert response.headers["access-control-allow-origin"] == origin
+            assert "X-Request-ID" in response.headers["access-control-expose-headers"]
+            assert "Origin" in response.headers["vary"]
+        else:
+            assert "access-control-allow-origin" not in response.headers

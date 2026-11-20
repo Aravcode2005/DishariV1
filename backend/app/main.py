@@ -8,6 +8,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import router
+from app.api.schemes import router as schemes_router
 from app.core.config import Settings
 from app.core.errors import register_exception_handlers
 from app.core.middleware import GatewayMiddleware
@@ -17,6 +18,7 @@ from app.schemas.common import ErrorResponse
 from app.services.documents import DocumentService
 from app.services.gemini import create_ai_provider
 from app.services.rules import JsonRulesEngine
+from app.services.scheme_loader import SchemeLoader
 
 
 def create_app(settings: Settings | None = None, repository: Repository | None = None) -> FastAPI:
@@ -24,6 +26,7 @@ def create_app(settings: Settings | None = None, repository: Repository | None =
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+        app.state.scheme_loader = SchemeLoader()
         app.state.rules_engine = JsonRulesEngine.from_file(settings.rules_path)
         app.state.repository = repository if repository is not None else create_repository(
             settings.database_url.get_secret_value() if settings.database_url else None
@@ -52,6 +55,7 @@ def create_app(settings: Settings | None = None, repository: Repository | None =
         expose_headers=["X-Request-ID"],
     )
     app.include_router(router)
+    app.include_router(schemes_router)
     return app
 
 

@@ -8,6 +8,7 @@ from starlette.exceptions import HTTPException
 
 from app.schemas.common import ErrorResponse
 from app.db.repository import StorageError
+from app.services.scheme_loader import SchemeNotFoundError
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +29,10 @@ def error_response(request: Request, status: int, code: str, message: str,
 
 
 def register_exception_handlers(app: FastAPI) -> None:
+    @app.exception_handler(SchemeNotFoundError)
+    async def scheme_not_found(request: Request, exc: SchemeNotFoundError) -> JSONResponse:
+        return error_response(request, 404, "SCHEME_NOT_FOUND", "Scheme not found")
+
     @app.exception_handler(APIError)
     async def application_error(request: Request, exc: APIError) -> JSONResponse:
         return error_response(request, exc.status_code, exc.code, exc.message)

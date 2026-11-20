@@ -33,6 +33,7 @@ class GatewayMiddleware:
                 await error_response(request, 413, "REQUEST_TOO_LARGE", "Request exceeds configured size limit")(scope, receive, send)
                 return
         received = 0
+        response_started = False
 
         async def limited_receive() -> Message:
             nonlocal received
@@ -44,11 +45,24 @@ class GatewayMiddleware:
             return message
 
         async def identified_send(message: Message) -> None:
+            nonlocal response_started
             if message["type"] == "http.response.start":
+                response_started = True
                 headers = list(message.get("headers", []))
                 if not any(key.lower() == b"x-request-id" for key, _ in headers):
                     headers.append((b"x-request-id", request_id.encode("ascii")))
                 message["headers"] = headers
             await send(message)
 
-        await self.app(scope, limited_receive, identified_send)
+        try:
+            await self.app(scope, limited_receive, identified_send)
+        except Exception as exc:
+            if response_started:
+                raise  # A response already sent cannot be replaced safely.
+            # Handle before returning through the outer CORS middleware. Otherwise
+            # Starlette's outermost server-error handler bypasses CORS on HTTP 500.
+            handler = request.app.exception_handlers.get(Exception)
+            if handler is None:
+                raise
+            response = await handler(request, exc)
+            await response(scope, limited_receive, identified_send)
