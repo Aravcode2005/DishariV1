@@ -4,4 +4,18 @@
 *.ptx
 *.cubin
 *.fatbin
+
+# Python local environments and secrets
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+
+# Backend local test artifacts
+.pytest_cache/
+backend/tmp/
+backend/data/
 /DishariV1
