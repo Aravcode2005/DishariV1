@@ -1,0 +1,140 @@
+/* Dishari's original playful Material-inspired theme. No Google branding is copied. */
+:root {
+  --bg: #f7f9ff;
+  --surface: #fff;
+  --surface-muted: #f8faff;
+  --ink: #20243a;
+  --ink-soft: #374151;
+  --ink-muted: #626b7d;
+  --line: #e2e8f4;
+  --line-faint: #e8edf7;
+  --line-strong: #a8b7ce;
+  --primary: #2563eb;
+  --primary-dark: #1744bf;
+  --primary-tint: #eaf1ff;
+  --green-fill: #ecfaef;
+  --green-border: #49a96d;
+  --green-pill: #177445;
+  --amber-fill: #fff8e2;
+  --amber-border: #e2ad37;
+  --amber-pill: #845500;
+  --red-fill: #fff0ed;
+  --red-border: #e4786f;
+  --red-pill: #bc3d37;
+  font-family: 'Nunito Sans', 'Inter', 'Noto Sans Bengali', 'Noto Sans Devanagari', system-ui, sans-serif;
+}
+body { background: var(--bg); }
+.app-shell { background: radial-gradient(ellipse 70% 26% at 0% 14%, #e7f1ffad 0%, transparent 100%), radial-gradient(ellipse 50% 22% at 100% 34%, #fff1c999 0%, transparent 100%), var(--bg); }
+.container { width: min(1240px, calc(100% - 56px)); }
+.site-header { background: #ffffffeb; backdrop-filter: blur(14px); border-bottom: 1px solid #e9edf7; box-shadow: 0 3px 28px #152d5c07; }
+.header-inner { min-height: 84px; }
+.brand-mark { width: 47px; height: 47px; border-radius: 16px; background: conic-gradient(from -16deg, #4285f4 0deg 98deg, #34a853 98deg 176deg, #fbbc05 176deg 251deg, #ea4335 251deg 306deg, #4285f4 306deg 360deg); box-shadow: 0 9px 16px #4285f42e, inset 0 0 0 3px #ffffff99; transform: rotate(-7deg); }
+.brand-mark span { font-family: inherit; font-size: 29px; transform: rotate(7deg); text-shadow: 0 1px 4px #00000020; }
+.brand-mark i { width: 7px; height: 7px; bottom: 6px; left: 8px; background: #fff; }
+.brand-name { font: 850 28px/1 'Nunito Sans', 'Noto Sans Bengali', sans-serif; letter-spacing: -.045em; }
+.brand-name small { font-size: 15px; font-weight: 650; color: #5683d2; }
+.operator-chip { background: #f1f5ff; color: #48618d; border: 1px solid #e4ebfa; font-weight: 700; }
+.language-switch { background: #f2f5fd; border: 0; border-radius: 999px; padding: 5px; }
+.language-button { border-radius: 999px; min-height: 35px; padding: 8px 15px; font-weight: 800; }
+.language-button.active { background: #fff; color: #1a73e8; box-shadow: 0 3px 9px #15254c19; }
+.main-layout { padding-top: 24px; padding-bottom: 84px; }
+.top-intro { position: relative; overflow: hidden; isolation: isolate; align-items: center; background: linear-gradient(117deg,#e6f0ff 0%,#f4f4ff 47%,#fff5dc 100%); border: 1px solid #e2e9f7; border-radius: 34px; padding: clamp(26px, 4vw, 56px); min-height: 270px; box-shadow: 0 15px 44px #436ab512; }
+.top-intro::before { content: ''; width: 160px; height: 160px; border: 25px solid #fbbc04; border-radius: 50%; position: absolute; top: -128px; right: 16%; opacity: .75; transform: rotate(20deg); z-index: -1; }
+.top-intro::after { content: ''; width: 126px; height: 126px; border-radius: 38px; background: #86ceaa; position: absolute; right: -87px; bottom: -42px; transform: rotate(26deg); opacity: .55; z-index: -1; }
+.intro-copy { max-width: 720px; position: relative; z-index: 1; }
+.eyebrow { width: fit-content; color: #204fa9; background: #ffffffb8; padding: 8px 13px; border: 1px solid #d6e4ff; border-radius: 99px; letter-spacing: .02em; text-transform: none; font-size: 12px; font-weight: 900; margin-bottom: 17px; }
+.eyebrow svg { color: #f2a800; }
+.top-intro h1 { font: 900 clamp(35px, 4.7vw, 59px)/1.1 'Nunito Sans', 'Noto Sans Bengali', 'Noto Sans Devanagari', sans-serif; letter-spacing: -.042em; color: #22345c; }
+.top-intro h1 em { display: inline; background: linear-gradient(95deg, #1a73e8, #725cda 58%, #c74f97); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.top-intro p { font-size: 15px; color: #526079; max-width: 670px; line-height: 1.7; }
+.intro-note { position: relative; max-width: 239px; gap: 12px; padding: 17px; background: #ffffffed; border: 1px solid #fff; border-radius: 22px; transform: rotate(3deg); box-shadow: 0 15px 35px #466bb221; }
+.intro-note::after { content: '✦'; position: absolute; right: -21px; top: -24px; font-size: 32px; color: #ea4335; }
+.intro-note-icon { width: 50px; height: 50px; border-radius: 16px; background: #dcf5e4; color: #22965c; }
+.intro-note strong { font-size: 14px; color: #273b62; }
+.intro-note p { font-size: 11px; color: #67758e; }
+.stepper-nav { padding: 31px 3px 31px; }
+.step { gap: 13px; }
+.step-bubble { width: 46px; height: 46px; border: 2px solid #cad5ec; background: #fff; color: #73809a; box-shadow: 0 4px 12px #152d5c0c; }
+.step.current .step-bubble { border: 0; background: #e3eeff; color: #1a73e8; box-shadow: 0 0 0 3px #9cc3ff; }
+.step.done .step-bubble { border-color: #34a853; background: #34a853; }
+.step:not(:last-child)::after { height: 3px; border-radius: 99px; background: #dce3f1; }
+.step.done:not(:last-child)::after { background: linear-gradient(90deg,#34a853,#4285f4); }
+.step-copy { background: transparent; }
+.step-copy strong { font-weight: 800; color: #344b77; }
+.page-contents { gap: 23px; }
+.kicker { text-transform: none; display: inline-block; width: fit-content; border-radius: 99px; padding: 7px 11px; background: #eaf0fe; color: #285ab6; letter-spacing: .01em; font-weight: 850; }
+.page-heading { gap: 10px; }
+.page-heading h2 { font: 850 clamp(27px, 3vw, 36px)/1.2 'Nunito Sans', 'Noto Sans Bengali', 'Noto Sans Devanagari', sans-serif; letter-spacing: -.035em; }
+.page-heading p { color: #6c7282; }
+.consent-card { background: #fff; border: 1.5px solid #dbe5f9; border-radius: 24px; padding: 24px 26px; align-items: center; box-shadow: 0 8px 30px #30559d08; }
+.consent-card.consented { background: #f4fff8; border-color: #8bd3a9; }
+.consent-symbol { width: 51px; height: 51px; border-radius: 16px; background: #e8f0fe; color: #3979dd; }
+.consent-main strong { font-size: 17px; }
+.consent-card input[type='checkbox'] { width: 25px; height: 25px; }
+.form-fieldset.is-locked { opacity: .59; }
+.form-columns { grid-template-columns: minmax(280px, .95fr) minmax(0, 1.85fr); gap: 19px; }
+.card { border: 1px solid #e1e8f6; border-radius: 26px; padding: 27px; box-shadow: 0 13px 36px #3b5c990b; }
+.card-header h3 { font: 850 20px/1.2 'Nunito Sans','Noto Sans Bengali','Noto Sans Devanagari',sans-serif; }
+.card-icon { width: 46px; height: 46px; border-radius: 15px; background: #e9efff; color: #3774e2; }
+.case-card .card-icon { background: #fff2d5; color: #ce8c08; }
+.form-fields { gap: 22px; }
+.field-label { font-weight: 800; color: #40516e; }
+.field { border: 1.5px solid #d9e0ef; border-radius: 13px; min-height: 49px; background: #fff; padding-inline: 13px; color: #24395e; transition: box-shadow .18s, border-color .18s; }
+.field:focus { outline: none; border-color: #4684f4; box-shadow: 0 0 0 4px #e6f0ff; }
+.completed-count { color: #166c46; background: #e4f8e9; border-color: #ccf0d7; font-weight: 850; }
+.document-grid { gap: 12px; }
+.document-slot { border-radius: 19px; background: #f3f7ff; border-color: #dbe5fa; padding: 16px; }
+.document-slot:nth-child(2) { background: #fff9ec; border-color: #f5e8c5; }
+.document-slot:nth-child(3) { background: #eefaf6; border-color: #cdebe0; }
+.document-slot.is-complete { border-color: #79c79b; background: #f3fff8; box-shadow: inset 0 0 0 1px #8aca9c3b; }
+.slot-counter { width: 35px; height: 35px; border-radius: 12px; background: white; color: #4776c9; font-size: 14px; box-shadow: 0 3px 8px #2c4a7920; }
+.document-slot:nth-child(2) .slot-counter { color: #b17b06; }
+.document-slot:nth-child(3) .slot-counter { color: #17815a; }
+.file-drop { border: 1.5px dashed #abc5f5; background: #ffffffbf; border-radius: 15px; padding: 19px 8px; transition: background .17s, border-color .17s; }
+.file-drop:not(.file-drop-disabled):hover { background: #eff6ff; border-color: #4285f4; }
+.file-label { color: #2463c7; font-weight: 900; }
+.file-label svg { color: #4285f4; }
+.file-guide { color: #65758e; }
+.action-card { border-radius: 24px; border-color: #dfe6f4; box-shadow: 0 12px 34px #38548c12; padding: 23px 26px; }
+.btn { border-radius: 999px; min-height: 52px; padding: 13px 24px; font-weight: 850; box-shadow: 0 2px 3px #112b5306; }
+.btn-primary { background: #1a73e8; box-shadow: 0 5px 14px #1a73e830; }
+.btn-primary:hover:not(:disabled) { background: #155dc3; box-shadow: 0 8px 24px #1a73e83c; }
+.btn-primary:disabled { box-shadow: none; background: #e2e8f3; border-color: #d4deee; color: #777f8c; }
+.btn-outline { border: 1.5px solid #aac9ff; color: #285dca; }
+.btn-outline:not(:disabled):hover { background: #e9f1ff; border-color: #5f96f4; }
+.btn-quiet { color: #245ab8; }
+.btn:not(:disabled):hover { transform: translateY(-2px); }
+.source-banner { border-radius: 16px; font-weight: 700; }
+.case-brief { border-radius: 20px; box-shadow: 0 8px 26px #314c8610; }
+.section-heading h2 { font-family: 'Nunito Sans', 'Noto Sans Bengali', 'Noto Sans Devanagari', sans-serif; font-weight: 850; }
+.mismatch-card { border-width: 1.5px; border-radius: 23px; padding: 26px; box-shadow: 0 8px 25px #b3261e0c; }
+.evidence-tile { border-radius: 14px; }
+.fix-box { border-radius: 15px; }
+.scheme-card { border-width: 1.5px; border-radius: 23px; box-shadow: 0 11px 28px #2030500a; }
+.approval-bar { border-radius: 24px; padding: 25px; box-shadow: 0 9px 24px #2030500a; }
+.citizen-sheet { border-radius: 28px; box-shadow: 0 14px 34px #20305014; }
+.sheet-logo { background: conic-gradient(#4285f4,#34a853,#fbbc05,#ea4335,#4285f4); }
+.site-footer { background: #f3f7ff; border-color: #e0e8f6; }
+@media (max-width: 1040px) { .form-columns { grid-template-columns: 1fr; } .intro-note { display: none; } }
+@media (max-width: 730px) {
+  .container { width: calc(100% - 28px); }
+  .main-layout { padding-top: 16px; }
+  .top-intro { padding: 28px 22px; border-radius: 25px; min-height: 0; }
+  .top-intro h1 { font-size: clamp(32px, 8vw, 42px); }
+  .top-intro::before { width: 110px; height: 110px; top: -94px; right: -12px; border-width: 21px; }
+  .stepper-nav { padding-block: 24px; }
+  .step:not(:last-child)::after { left: 40px; }
+  .card { padding: 20px; }
+  .document-grid { grid-template-columns: 1fr; }
+  .consent-card { padding: 18px; }
+  .approval-bar { padding: 18px; }
+  .btn { min-height: 49px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+@media print {
+  .app-shell, body { background: #fff !important; }
+  .citizen-sheet { border: none; border-radius: 0; box-shadow: none; }
+  .sheet-logo { background: #1a73e8; }
+}
