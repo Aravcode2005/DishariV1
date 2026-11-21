@@ -1,2 +1,0 @@
-# Optional: install only when using DATABASE_URL.
-psycopg[binary]>=3.2,<4
