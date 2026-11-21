@@ -18,3 +18,4 @@ __pycache__/
 .pytest_cache/
 backend/tmp/
 backend/data/
+/DishariV1
